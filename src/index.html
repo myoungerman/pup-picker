@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link href="styles.css" type="text/css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <title>Pup Picker</title>
+  </head>
+
+  <body>
+    <header id="site-masthead">
+      <img src="images/logo.png" class="img-logo" alt="Pup Picker logo">
+      <h1>Pup Picker</h1>
+    </header>
+    <main>
+        <section id="filter-container">
+            <h2>Search criteria</h2>
+            <div id="filter-gender-container">
+                <p>Gender</p>
+                <form id="genderForm">
+                    <input type="checkbox" id="gender-male" name="gender-male" value="Male">
+                    <label for="gender-male">Male</label>
+                    <input type="checkbox" id="gender-female" name="gender-female" value="Female">
+                    <label for="gender-female">Female</label>
+                </form>
+            </div>
+            <div id="filter-age-container">
+                <p>Age</p>
+                <input type="range" min="1" max="18" value="9" class="slider" id="lifeSpan">
+            </div>
+            <div id="filter-weight-container">
+                <p>Weight</p>
+                <input type="range" min="5" max="200" value="50" class="slider" id="weight">
+            </div>
+            <div id="filter-size-container">
+                <p>Size</p>
+                <form id="sizeForm">
+                    <input type="checkbox" id="size-small" name="size" value="Size">
+                    <label for="size-small">Small</label>
+                    <input type="checkbox" id="size-medium" name="size" value="Size">
+                    <label for="size-medium" >Medium</label>
+                    <input type="checkbox" id="size-large" name="size" value="Size">
+                    <label for="size-large" >Large</label>
+                    <input type="checkbox" id="size-extra-large" name="size" value="Size">
+                    <label for="size-extra-large">Extra-large</label>
+                </form>
+            </div>
+            <div id="filter-hair-type-container">
+                <p>Hair type</p>
+                <form id="hairTypeForm">
+                    <input type="checkbox" id="type-short" name="size" value="Short">
+                    <label for="type-short">Short</label>
+                    <input type="checkbox" id="type-medium" name="size" value="Medium">
+                    <label for="type-medium">Medium</label>
+                    <input type="checkbox" id="type-long" name="size" value="Long">
+                    <label for="type-long">Long</label>
+                    <input type="checkbox" id="type-wire" name="size" value="Wire">
+                    <label for="type-wire">Wire</label>
+                    <input type="checkbox" id="type-hairless" name="size" value="Hairless">
+                    <label for="type-hairless">Hairless</label>
+                    <input type="checkbox" id="type-curly" name="size" value="Curly">
+                    <label for="type-curly">Curly</label>
+                </form>
+            </div>
+        <button id="btn-search" type="button">Search</button>
+        </section>
+        <section id="results-container">
+            <h2>Search results</h2>
+            <div id="result-0" class="result">
+                <img src="images/person.jpeg" class="result-img" alt="">
+                <div class="result-text">
+                    <p>Name</p>
+                    <p>Description</p>
+                </div>
+                <div class="btn-rate-result">
+                <img src="images/heart.png" class="result-icons" alt="Favorite button">
+                <img src="images/dislike.png" class="result-icons" alt="Dislike button">
+                </div>
+            </div>
+        </section>
+        <section id="favorites-container">
+            <header id="favorites-header">
+                <img src="images/expand.png" class="btn-toggle" alt="" id="btn-toggle-favorites"> 
+                <p>My favorites</p>
+            </header>
+            <!-- 
+            <div id="favorite-0">
+                <img src="" alt="">
+                <p>Name</p>
+                <p>Breed</p>
+                <img src="images/close.png" alt="Delete button" id="btn-delete-favorite-0">
+            </div>
+            -->
+        </section>
+    </main>
+  </body>
+</html>
