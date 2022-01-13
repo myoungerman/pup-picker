@@ -20,7 +20,7 @@
             <h2>Search criteria</h2>
             <div id="filter-gender-container">
                 <p>Gender</p>
-                <form id="genderForm">
+                <form id="gender-form">
                     <input type="checkbox" id="gender-male" name="gender-male" value="Male">
                     <label for="gender-male">Male</label>
                     <input type="checkbox" id="gender-female" name="gender-female" value="Female">
@@ -29,40 +29,45 @@
             </div>
             <div id="filter-age-container">
                 <p>Age</p>
-                <input type="range" min="1" max="18" value="9" class="slider" id="lifeSpan">
-            </div>
-            <div id="filter-weight-container">
-                <p>Weight</p>
-                <input type="range" min="5" max="200" value="50" class="slider" id="weight">
+                <form id="age-form">
+                    <input type="checkbox" id="age-baby" name="age-baby" value="Baby">
+                    <label for="age-baby">Baby</label>
+                    <input type="checkbox" id="age-young" name="age-young" value="Young">
+                    <label for="age-young">Young</label>
+                    <input type="checkbox" id="age-adult" name="age-adult" value="Adult">
+                    <label for="age-adult">Adult</label>
+                    <input type="checkbox" id="age-senior" name="age-senior" value="Senior">
+                    <label for="age-senior">Senior</label>
+                </form>
             </div>
             <div id="filter-size-container">
                 <p>Size</p>
-                <form id="sizeForm">
-                    <input type="checkbox" id="size-small" name="size" value="Size">
+                <form id="size-form">
+                    <input type="checkbox" id="size-small" name="size-small" value="Small">
                     <label for="size-small">Small</label>
-                    <input type="checkbox" id="size-medium" name="size" value="Size">
+                    <input type="checkbox" id="size-medium" name="size-medium" value="Medium">
                     <label for="size-medium" >Medium</label>
-                    <input type="checkbox" id="size-large" name="size" value="Size">
+                    <input type="checkbox" id="size-large" name="size-large" value="Large">
                     <label for="size-large" >Large</label>
-                    <input type="checkbox" id="size-extra-large" name="size" value="Size">
+                    <input type="checkbox" id="size-extra-large" name="size-extra-large" value="Extra-large">
                     <label for="size-extra-large">Extra-large</label>
                 </form>
             </div>
-            <div id="filter-hair-type-container">
+            <div id="filter-coat-type-container">
                 <p>Hair type</p>
-                <form id="hairTypeForm">
-                    <input type="checkbox" id="type-short" name="size" value="Short">
-                    <label for="type-short">Short</label>
-                    <input type="checkbox" id="type-medium" name="size" value="Medium">
-                    <label for="type-medium">Medium</label>
-                    <input type="checkbox" id="type-long" name="size" value="Long">
-                    <label for="type-long">Long</label>
-                    <input type="checkbox" id="type-wire" name="size" value="Wire">
-                    <label for="type-wire">Wire</label>
-                    <input type="checkbox" id="type-hairless" name="size" value="Hairless">
-                    <label for="type-hairless">Hairless</label>
-                    <input type="checkbox" id="type-curly" name="size" value="Curly">
-                    <label for="type-curly">Curly</label>
+                <form id="coat-type-form">
+                    <input type="checkbox" id="coat-short" name="coat-short" value="Short">
+                    <label for="coat-short">Short</label>
+                    <input type="checkbox" id="coat-medium" name="coat-short" value="Medium">
+                    <label for="coat-medium">Medium</label>
+                    <input type="checkbox" id="coat-long" name="coat-long" value="Long">
+                    <label for="coat-long">Long</label>
+                    <input type="checkbox" id="coat-wire" name="coat-wire" value="Wire">
+                    <label for="coat-wire">Wire</label>
+                    <input type="checkbox" id="coat-hairless" name="coat-hairless" value="Hairless">
+                    <label for="coat-hairless">Hairless</label>
+                    <input type="checkbox" id="coat-curly" name="coat-curly" value="Curly">
+                    <label for="coat-curly">Curly</label>
                 </form>
             </div>
         <button id="btn-search" type="button">Search</button>
@@ -98,3 +103,5 @@
     </main>
   </body>
 </html>
+
+<script src="js/controller.js" type="module"></script>
