@@ -1,0 +1,12 @@
+{
+    "name": "pup-picker",
+    "source": "src/index.html",
+    "browserslist": "> 0.5%, last 2 versions, not dead",
+    "scripts": {
+        "start": "parcel index.html && parcel watch index.html",
+        "build": "parcel build index.html"
+    },
+    "devDependencies": {
+        "parcel": "^2.1.1"
+    }
+}

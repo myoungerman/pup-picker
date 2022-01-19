@@ -1,0 +1,1 @@
+{"mappings":"AAAA,KAAK,CAAC,SAAS,GAAG,QAAQ,CAAC,cAAc,CAAC,CAAY;AAEtD,SAAS,CAAC,gBAAgB,CAAC,CAAO,QAAE,UAAU","sources":["src/js/controller.js"],"sourcesContent":["const searchBtn = document.getElementById('btn-search');\n\nsearchBtn.addEventListener('click', initSearch());"],"names":[],"version":3,"file":"index.430fc437.js.map","sourceRoot":"/__parcel_source_root/"}
