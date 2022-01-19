@@ -1,10 +1,15 @@
-import { KEY } from './config.js';
-import { SECRET } from './config.js';
-import { getToken, trackWhenTokenExpires, hasTokenExpired } from './models.js';
+import { getToken, hasTokenExpired } from './models.js';
 import { getFormData } from './models.js';
 import { searchForPets } from './models.js';
+import { renderHtml } from './views.js';
+import { deleteChildren } from './views.js';
+import { likeOrDislikeBtn } from './models.js';
+import { toggleElement } from './views.js';
 
 const searchBtn = document.getElementById('btn-search');
+const resultsContainer = document.getElementById('results-container');
+const toggleFavoritesBtn = document.getElementById('btn-toggle-favorites');
+const favoritesList = document.getElementById('favorites-list');
 
 init();
 
@@ -13,9 +18,14 @@ function init() {
 }
 
 searchBtn.addEventListener('click', () => {
-
-    // check if token has expired
     hasTokenExpired();
+    deleteChildren(resultsContainer);
     getFormData();
-    searchForPets();
+    searchForPets(renderHtml, resultsContainer);
+});
+
+resultsContainer.addEventListener('click', likeOrDislikeBtn, false);
+
+toggleFavoritesBtn.addEventListener('click', () => {
+    toggleElement(favoritesList);
 });
