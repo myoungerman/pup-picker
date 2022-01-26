@@ -10,6 +10,7 @@
 #favorites-container {
     display: flex;
     flex-direction: row;
+    
 }
 
 #favorites-list {

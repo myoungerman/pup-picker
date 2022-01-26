@@ -13,6 +13,7 @@ let whenTokenExpires = 0;
 let token = "";
 let jsonString = "";
 let searchResults;
+const imageBasePath = 'http://localhost:1234/';
 
 const getToken = async function() {
     try {
@@ -116,8 +117,8 @@ function createHtmlforResults() {
             <p class="description">${currDog[i].description}</p>
         </div>
         <div class="btn-rate-result">
-        <img src="images/heart.png" id="favorite-btn-${i}" class="result-icons" alt="Favorite button">
-        <img src="images/dislike.png" id="dislike-btn-${i}" class="result-icons" alt="Dislike button">
+        <img src="${imageBasePath}images/heart.png" id="favorite-btn-${i}" class="result-icons" alt="Favorite button">
+        <img src="${imageBasePath}images/dislike.png" id="dislike-btn-${i}" class="result-icons" alt="Dislike button">
         </div>
         </div>
         `;
@@ -152,8 +153,10 @@ function addToFavorites(parentResult) {
    <div class="favorite-text">
        <p class="name">${parentName}</p>
    </div>
-   <img src="images/close.png" id="delete-btn-${i}" class="delete-icon" alt="Delete button">
+   <img src="${imageBasePath}images/close.png" id="delete-btn-${i}" class="delete-icon" alt="Delete button">
    </div>`];
+
+   console.log(`"${imageBasePath}images/close.png"`);
 
    renderHtml(html, favoritesContainer, "beforeEnd");
 }
