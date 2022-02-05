@@ -32,7 +32,4 @@ toggleFavoritesBtn.addEventListener('click', () => {
 });
 
 // add listener to favoritesList, call deleteFavorite
-favoritesList.addEventListener('click', () => {
-    console.log("hi");
-    deleteFavorite();
-});
+favoritesList.addEventListener('click', deleteFavorite, false);

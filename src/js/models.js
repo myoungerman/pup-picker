@@ -48,13 +48,9 @@ function getFormData() {
     This paragraph of code comments describes how to check the user's choices if the forms are hard-coded in the HTML.
     */
    // Put the form names in an array
-
    // Each el in the array is a form name. For each el, look that DOM element up using getElementById. 
-
    // For that DOM element, get its children that have a type of 'input' and record in an array how many of those children there are.
-
    // For each child, see if it's selected.
-
    // Need to finish documenting this
 
     // Iterate through each form in the HTML
@@ -171,6 +167,16 @@ function addToFavorites(parentResult) {
    renderHtml(html, favoritesContainer, "beforeEnd");
 }
 
-function deleteFavorite() {
-    console.log("im favorite");
+function deleteFavorite(e) {
+    let btn = e.target;
+
+    // Find what div this button is in so we can pull data from it to our favorites panel
+    if (btn.id.includes("delete-btn")) {
+        let parentResult = btn.closest("div.favorite");
+
+        // Delete item from favorites
+        parentResult.remove();
+    }
+
+    e.stopPropagation();
 }
