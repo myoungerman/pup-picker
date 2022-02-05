@@ -5,6 +5,7 @@ import { renderHtml } from './views.js';
 import { deleteChildren } from './views.js';
 import { likeOrDislikeBtn } from './models.js';
 import { toggleElement } from './views.js';
+import { deleteFavorite } from './models.js';
 
 const searchBtn = document.getElementById('btn-search');
 const resultsContainer = document.getElementById('results-container');
@@ -28,4 +29,10 @@ resultsContainer.addEventListener('click', likeOrDislikeBtn, false);
 
 toggleFavoritesBtn.addEventListener('click', () => {
     toggleElement(favoritesList);
+});
+
+// add listener to favoritesList, call deleteFavorite
+favoritesList.addEventListener('click', () => {
+    console.log("hi");
+    deleteFavorite();
 });

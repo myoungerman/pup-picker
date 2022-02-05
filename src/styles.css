@@ -28,12 +28,37 @@ body {
     padding-top: 10px;
 }
 
+.delete-icon {
+    width: 100%;
+    max-width: 30px;
+    height: 30px;
+}
+
+.favorite {
+    display: flex;
+    flex-direction: row;
+    width: 305px;
+    height: 132px;
+    margin-bottom: 30px;
+}
+
 #favorites-container {
     display: flex;
     flex-direction: row;
     z-index: 2;
     position: absolute;
     right: 0px;
+    background-color: white;
+}
+
+.favorite-text {
+    padding-left: 10px;
+    font-size: 1.125rem;
+}
+
+.favorite-img {
+    max-width: 110px; 
+    width: 100%;
 }
 
 #favorites-list {
@@ -71,6 +96,10 @@ main {
     display: flex;
     flex-direction: row;
     position: relative;
+}
+
+.name {
+    width: 128px;
 }
 
 .img-logo {

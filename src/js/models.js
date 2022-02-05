@@ -8,12 +8,12 @@ export { searchForPets };
 export { hasTokenExpired };
 export { trackWhenTokenExpires };
 export { likeOrDislikeBtn };
+export { deleteFavorite };
 
 let whenTokenExpires = 0;
 let token = "";
 let jsonString = "";
 let searchResults;
-const imageBasePath = 'http://localhost:1234/';
 
 const getToken = async function() {
     try {
@@ -43,6 +43,19 @@ function getFormData() {
     }; 
     const categories = ['age', 'gender', 'size', 'coat'];
     let formsArr = Array.from(forms);
+
+    /*
+    This paragraph of code comments describes how to check the user's choices if the forms are hard-coded in the HTML.
+    */
+   // Put the form names in an array
+
+   // Each el in the array is a form name. For each el, look that DOM element up using getElementById. 
+
+   // For that DOM element, get its children that have a type of 'input' and record in an array how many of those children there are.
+
+   // For each child, see if it's selected.
+
+   // Need to finish documenting this
 
     // Iterate through each form in the HTML
    formsArr.forEach((form) => {
@@ -117,8 +130,8 @@ function createHtmlforResults() {
             <p class="description">${currDog[i].description}</p>
         </div>
         <div class="btn-rate-result">
-        <img src="${imageBasePath}images/heart.png" id="favorite-btn-${i}" class="result-icons" alt="Favorite button">
-        <img src="${imageBasePath}images/dislike.png" id="dislike-btn-${i}" class="result-icons" alt="Dislike button">
+        <img src="images/heart.png" id="favorite-btn-${i}" class="result-icons" alt="Favorite button">
+        <img src="images/dislike.png" id="dislike-btn-${i}" class="result-icons" alt="Dislike button">
         </div>
         </div>
         `;
@@ -136,7 +149,6 @@ function likeOrDislikeBtn(e) {
 
         addToFavorites(parentResult);
     }
-    //if the id of the clicked element is "dislike-btn", do this
 
     e.stopPropagation();
 }
@@ -153,10 +165,12 @@ function addToFavorites(parentResult) {
    <div class="favorite-text">
        <p class="name">${parentName}</p>
    </div>
-   <img src="${imageBasePath}images/close.png" id="delete-btn-${i}" class="delete-icon" alt="Delete button">
+   <img src="images/close.png" id="delete-btn-${i}" class="delete-icon" alt="Delete button">
    </div>`];
 
-   console.log(`"${imageBasePath}images/close.png"`);
-
    renderHtml(html, favoritesContainer, "beforeEnd");
+}
+
+function deleteFavorite() {
+    console.log("im favorite");
 }

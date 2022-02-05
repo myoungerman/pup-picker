@@ -539,6 +539,11 @@ resultsContainer.addEventListener('click', _modelsJs.likeOrDislikeBtn, false);
 toggleFavoritesBtn.addEventListener('click', ()=>{
     _viewsJs.toggleElement(favoritesList);
 });
+// add listener to favoritesList, call deleteFavorite
+favoritesList.addEventListener('click', ()=>{
+    console.log("hi");
+    _modelsJs.deleteFavorite();
+});
 
 },{"./models.js":"edpJG","./views.js":"iinvn"}],"edpJG":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -555,6 +560,8 @@ parcelHelpers.export(exports, "trackWhenTokenExpires", ()=>trackWhenTokenExpires
 );
 parcelHelpers.export(exports, "likeOrDislikeBtn", ()=>likeOrDislikeBtn
 );
+parcelHelpers.export(exports, "deleteFavorite", ()=>deleteFavorite
+);
 var _preludeLs = require("prelude-ls");
 var _config = require("./config");
 var _views = require("./views");
@@ -562,7 +569,6 @@ let whenTokenExpires = 0;
 let token = "";
 let jsonString = "";
 let searchResults;
-const imageBasePath = 'http://localhost:1234/';
 const getToken = async function() {
     try {
         let res = await fetch('https://api.petfinder.com/v2/oauth2/token', {
@@ -595,6 +601,13 @@ function getFormData() {
         'coat'
     ];
     let formsArr = Array.from(forms);
+    /*
+    This paragraph of code comments describes how to check the user's choices if the forms are hard-coded in the HTML.
+    */ // Put the form names in an array
+    // Each el in the array is a form name. For each el, look that DOM element up using getElementById. 
+    // For that DOM element, get its children that have a type of 'input' and record in an array how many of those children there are.
+    // For each child, see if it's selected.
+    // Need to finish documenting this
     // Iterate through each form in the HTML
     formsArr.forEach((form)=>{
         let missingInput = true;
@@ -653,8 +666,8 @@ function createHtmlforResults() {
             <p class="description">${currDog[i].description}</p>
         </div>
         <div class="btn-rate-result">
-        <img src="${imageBasePath}images/heart.png" id="favorite-btn-${i}" class="result-icons" alt="Favorite button">
-        <img src="${imageBasePath}images/dislike.png" id="dislike-btn-${i}" class="result-icons" alt="Dislike button">
+        <img src="images/heart.png" id="favorite-btn-${i}" class="result-icons" alt="Favorite button">
+        <img src="images/dislike.png" id="dislike-btn-${i}" class="result-icons" alt="Dislike button">
         </div>
         </div>
         `;
@@ -669,7 +682,6 @@ function likeOrDislikeBtn(e) {
         let parentResult = btn.closest("div.result");
         addToFavorites(parentResult);
     }
-    //if the id of the clicked element is "dislike-btn", do this
     e.stopPropagation();
 }
 function addToFavorites(parentResult) {
@@ -684,11 +696,13 @@ function addToFavorites(parentResult) {
    <div class="favorite-text">
        <p class="name">${parentName}</p>
    </div>
-   <img src="${imageBasePath}images/close.png" id="delete-btn-${i}" class="delete-icon" alt="Delete button">
+   <img src="images/close.png" id="delete-btn-${i}" class="delete-icon" alt="Delete button">
    </div>`
     ];
-    console.log(`"${imageBasePath}images/close.png"`);
     _views.renderHtml(html, favoritesContainer, "beforeEnd");
+}
+function deleteFavorite() {
+    console.log("im favorite");
 }
 
 },{"prelude-ls":"4AyyW","./config":"k5Hzs","./views":"iinvn","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4AyyW":[function(require,module,exports) {
