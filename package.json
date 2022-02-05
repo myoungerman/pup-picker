@@ -8,5 +8,9 @@
     },
     "devDependencies": {
         "parcel": "^2.2.1"
+    },
+    "dependencies": {
+        "@parcel/source-map": "^2.0.2",
+        "prelude-ls": "^1.2.1"
     }
 }

@@ -12,12 +12,14 @@ const resultsContainer = document.getElementById('results-container');
 const toggleFavoritesBtn = document.getElementById('btn-toggle-favorites');
 const favoritesList = document.getElementById('favorites-list');
 
+// Gets API token on startup
 init();
 
 function init() {
     getToken();
 }
 
+// Handles the Search button (clearing currently loaded results, then loading new results and rendering them)
 searchBtn.addEventListener('click', () => {
     hasTokenExpired();
     deleteChildren(resultsContainer);
@@ -25,11 +27,13 @@ searchBtn.addEventListener('click', () => {
     searchForPets(renderHtml, resultsContainer);
 });
 
+// Handles the Like and Dislike button in each search result
 resultsContainer.addEventListener('click', likeOrDislikeBtn, false);
 
+// Toggles the visibility of the favorites list
 toggleFavoritesBtn.addEventListener('click', () => {
     toggleElement(favoritesList);
 });
 
-// add listener to favoritesList, call deleteFavorite
+// Deletes the selected favorite from the favorites list
 favoritesList.addEventListener('click', deleteFavorite, false);

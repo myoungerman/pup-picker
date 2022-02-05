@@ -525,21 +525,25 @@ const searchBtn = document.getElementById('btn-search');
 const resultsContainer = document.getElementById('results-container');
 const toggleFavoritesBtn = document.getElementById('btn-toggle-favorites');
 const favoritesList = document.getElementById('favorites-list');
+// Gets API token on startup
 init();
 function init() {
     _modelsJs.getToken();
 }
+// Handles the Search button (clearing currently loaded results, then loading new results and rendering them)
 searchBtn.addEventListener('click', ()=>{
     _modelsJs.hasTokenExpired();
     _viewsJs.deleteChildren(resultsContainer);
     _modelsJs.getFormData();
     _modelsJs.searchForPets(_viewsJs.renderHtml, resultsContainer);
 });
+// Handles the Like and Dislike button in each search result
 resultsContainer.addEventListener('click', _modelsJs.likeOrDislikeBtn, false);
+// Toggles the visibility of the favorites list
 toggleFavoritesBtn.addEventListener('click', ()=>{
     _viewsJs.toggleElement(favoritesList);
 });
-// add listener to favoritesList, call deleteFavorite
+// Deletes the selected favorite from the favorites list
 favoritesList.addEventListener('click', _modelsJs.deleteFavorite, false);
 
 },{"./models.js":"edpJG","./views.js":"iinvn"}],"edpJG":[function(require,module,exports) {
@@ -562,10 +566,12 @@ parcelHelpers.export(exports, "deleteFavorite", ()=>deleteFavorite
 var _preludeLs = require("prelude-ls");
 var _config = require("./config");
 var _views = require("./views");
+var _dislikePng = require("../images/dislike.png");
 let whenTokenExpires = 0;
 let token = "";
 let jsonString = "";
 let searchResults;
+let resultsToFilterOut = [];
 const getToken = async function() {
     try {
         let res = await fetch('https://api.petfinder.com/v2/oauth2/token', {
@@ -583,7 +589,6 @@ const getToken = async function() {
     }
 };
 function getFormData() {
-    console.log('getting data');
     let forms = document.forms;
     let formData = {
         gender: "",
@@ -598,13 +603,6 @@ function getFormData() {
         'coat'
     ];
     let formsArr = Array.from(forms);
-    /*
-    This paragraph of code comments describes how to check the user's choices if the forms are hard-coded in the HTML.
-    */ // Put the form names in an array
-    // Each el in the array is a form name. For each el, look that DOM element up using getElementById. 
-    // For that DOM element, get its children that have a type of 'input' and record in an array how many of those children there are.
-    // For each child, see if it's selected.
-    // Need to finish documenting this
     // Iterate through each form in the HTML
     formsArr.forEach((form)=>{
         let missingInput = true;
@@ -656,28 +654,39 @@ function createHtmlforResults() {
     let allDogs = [];
     for(let i = 0; i < searchResults.animals.length; i++){
         let currDog = searchResults.animals;
-        let templateCopy = `<div id="result-${i}" class="result">
-        <img src="${currDog[i].primary_photo_cropped.full}" class="result-img" alt="">
-        <div class="result-text">
-            <p class="name">${currDog[i].name}</p>
-            <p class="description">${currDog[i].description}</p>
-        </div>
-        <div class="btn-rate-result">
-        <img src="images/heart.png" id="favorite-btn-${i}" class="result-icons" alt="Favorite button">
-        <img src="images/dislike.png" id="dislike-btn-${i}" class="result-icons" alt="Dislike button">
-        </div>
-        </div>
-        `;
-        allDogs.push(templateCopy);
+        if (!resultsToFilterOut.includes(String(currDog[i].id))) {
+            let templateCopy = `<div id="result-${i}-id-${currDog[i].id}" class="result">
+            <img src="${currDog[i].primary_photo_cropped.full}" class="result-img" alt="">
+            <div class="result-text">
+                <p class="name">${currDog[i].name}</p>
+                <p class="description">${currDog[i].description}</p>
+            </div>
+            <div class="btn-rate-result">
+            <img src="images/heart.png" id="favorite-btn-${i}" class="result-icons" alt="Favorite button">
+            <img src="${_dislikePng.dislikeBtnImage}" id="dislike-btn-${i}" class="result-icons" alt="Dislike button">
+            </div>
+            </div>
+            `;
+            allDogs.push(templateCopy);
+        }
     }
     return allDogs;
 }
 function likeOrDislikeBtn(e) {
     let btn = e.target;
-    // Find what div this button is in so we can pull data from it to our favorites panel
+    // Handles the favorite button, which adds the selected pet to your favorites list
     if (btn.id.includes("favorite-btn")) {
         let parentResult = btn.closest("div.result");
         addToFavorites(parentResult);
+    }
+    // Handles the dislike button, which removes the selected pet from both current & future search results
+    if (btn.id.includes("dislike-btn")) {
+        let parentResult = btn.closest("div.result");
+        // Get the string after 'id-' that is unique to each pet
+        let divIdText = String(parentResult.id).split('id-');
+        const petId = divIdText[1];
+        resultsToFilterOut.push(petId);
+        parentResult.remove();
     }
     e.stopPropagation();
 }
@@ -700,7 +709,7 @@ function addToFavorites(parentResult) {
 }
 function deleteFavorite(e) {
     let btn = e.target;
-    // Find what div this button is in so we can pull data from it to our favorites panel
+    // Find what div this button is in so we can pull its data to our favorites panel
     if (btn.id.includes("delete-btn")) {
         let parentResult = btn.closest("div.favorite");
         // Delete item from favorites
@@ -709,7 +718,7 @@ function deleteFavorite(e) {
     e.stopPropagation();
 }
 
-},{"prelude-ls":"gYKvV","./config":"k5Hzs","./views":"iinvn","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gYKvV":[function(require,module,exports) {
+},{"prelude-ls":"gYKvV","./config":"k5Hzs","./views":"iinvn","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../images/dislike.png":"4w6en"}],"gYKvV":[function(require,module,exports) {
 // Generated by LiveScript 1.6.0
 var Func, List, Obj, Str, Num, id, isType, replicate, prelude, toString$ = {
 }.toString;
@@ -2014,6 +2023,44 @@ function toggleElement(el) {
     if (displayVal === "block" || displayVal === "inline") el.style.display = "none";
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["ddCAb","aenu9"], "aenu9", "parcelRequire5a1e")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4w6en":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('hWUTQ') + "dislike.9a9460d3.png" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
+"use strict";
+var bundleURL = {
+};
+function getBundleURLCached(id) {
+    var value = bundleURL[id];
+    if (!value) {
+        value = getBundleURL();
+        bundleURL[id] = value;
+    }
+    return value;
+}
+function getBundleURL() {
+    try {
+        throw new Error();
+    } catch (err) {
+        var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
+        if (matches) // The first two stack frames will be this function and getBundleURLCached.
+        // Use the 3rd one, which will be a runtime in the original bundle.
+        return getBaseURL(matches[2]);
+    }
+    return '/';
+}
+function getBaseURL(url) {
+    return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
+} // TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
+function getOrigin(url) {
+    var matches = ('' + url).match(/(https?|file|ftp):\/\/[^/]+/);
+    if (!matches) throw new Error('Origin not found');
+    return matches[0];
+}
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+exports.getOrigin = getOrigin;
+
+},{}]},["ddCAb","aenu9"], "aenu9", "parcelRequire5a1e")
 
 //# sourceMappingURL=index.e37f48ea.js.map
