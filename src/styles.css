@@ -38,6 +38,8 @@ body {
     display: flex;
     flex-direction: row;
     width: 305px;
+    height: 132px;
+    margin-bottom: 30px;
 }
 
 #favorites-container {
