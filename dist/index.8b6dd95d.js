@@ -142,10 +142,10 @@
       this[globalName] = mainExports;
     }
   }
-})({"3pKQK":[function(require,module,exports) {
+})({"d0Z72":[function(require,module,exports) {
 "use strict";
 var HMR_HOST = null;
-var HMR_PORT = null;
+var HMR_PORT = 1234;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "916932b22e4085ab";
 module.bundle.HMR_BUNDLE_ID = "0a156ff98b6dd95d";
@@ -156,14 +156,14 @@ function _nonIterableSpread() {
     throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 function _iterableToArray(iter) {
-    if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
 }
 function _arrayWithoutHoles(arr) {
     if (Array.isArray(arr)) return _arrayLikeToArray(arr);
 }
 function _createForOfIteratorHelper(o, allowArrayLike) {
-    var it;
-    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+    var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
+    if (!it) {
         if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
             if (it) o = it;
             var i = 0;
@@ -191,7 +191,7 @@ function _createForOfIteratorHelper(o, allowArrayLike) {
     var normalCompletion = true, didErr = false, err;
     return {
         s: function s() {
-            it = o[Symbol.iterator]();
+            it = it.call(o);
         },
         n: function n() {
             var step = it.next();
@@ -525,20 +525,26 @@ var searchBtn = document.getElementById('btn-search');
 var resultsContainer = document.getElementById('results-container');
 var toggleFavoritesBtn = document.getElementById('btn-toggle-favorites');
 var favoritesList = document.getElementById('favorites-list');
+// Gets API token on startup
 init();
 function init() {
     _modelsJs.getToken();
 }
+// Handles the Search button (clearing currently loaded results, then loading new results and rendering them)
 searchBtn.addEventListener('click', function() {
     _modelsJs.hasTokenExpired();
     _viewsJs.deleteChildren(resultsContainer);
     _modelsJs.getFormData();
     _modelsJs.searchForPets(_viewsJs.renderHtml, resultsContainer);
 });
+// Handles the Like and Dislike button in each search result
 resultsContainer.addEventListener('click', _modelsJs.likeOrDislikeBtn, false);
+// Toggles the visibility of the favorites list
 toggleFavoritesBtn.addEventListener('click', function() {
     _viewsJs.toggleElement(favoritesList);
 });
+// Deletes the selected favorite from the favorites list
+favoritesList.addEventListener('click', _modelsJs.deleteFavorite, false);
 
 },{"./models.js":"6ZY1B","./views.js":"5FVmp"}],"6ZY1B":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -561,16 +567,21 @@ parcelHelpers.export(exports, "trackWhenTokenExpires", function() {
 parcelHelpers.export(exports, "likeOrDislikeBtn", function() {
     return likeOrDislikeBtn;
 });
+parcelHelpers.export(exports, "deleteFavorite", function() {
+    return deleteFavorite;
+});
 var _helpers = require("@swc/helpers");
 var _regeneratorRuntime = require("regenerator-runtime");
 var _regeneratorRuntimeDefault = parcelHelpers.interopDefault(_regeneratorRuntime);
 var _preludeLs = require("prelude-ls");
 var _config = require("./config");
 var _views = require("./views");
+var _dislikePng = require("../images/dislike.png");
 var whenTokenExpires = 0;
 var token = "";
 var jsonString = "";
 var searchResults;
+var resultsToFilterOut = [];
 var getToken = function() {
     var _ref = _helpers.asyncToGenerator(_regeneratorRuntimeDefault.default.mark(function _callee() {
         var res, data;
@@ -616,7 +627,6 @@ var getToken = function() {
     };
 }();
 function getFormData() {
-    console.log('getting data');
     var forms = document.forms;
     var formData = {
         gender: "",
@@ -728,19 +738,29 @@ function createHtmlforResults() {
     var allDogs = [];
     for(var i = 0; i < searchResults.animals.length; i++){
         var currDog = searchResults.animals;
-        var templateCopy = "<div id=\"result-".concat(i, "\" class=\"result\">\n        <img src=\"").concat(currDog[i].primary_photo_cropped.full, "\" class=\"result-img\" alt=\"\">\n        <div class=\"result-text\">\n            <p class=\"name\">").concat(currDog[i].name, "</p>\n            <p class=\"description\">").concat(currDog[i].description, "</p>\n        </div>\n        <div class=\"btn-rate-result\">\n        <img src=\"images/heart.png\" id=\"favorite-btn-").concat(i, "\" class=\"result-icons\" alt=\"Favorite button\">\n        <img src=\"images/dislike.png\" id=\"dislike-btn-").concat(i, "\" class=\"result-icons\" alt=\"Dislike button\">\n        </div>\n        </div>\n        ");
-        allDogs.push(templateCopy);
+        if (!resultsToFilterOut.includes(String(currDog[i].id))) {
+            var templateCopy = "<div id=\"result-".concat(i, "-id-").concat(currDog[i].id, "\" class=\"result\">\n            <img src=\"").concat(currDog[i].primary_photo_cropped.full, "\" class=\"result-img\" alt=\"\">\n            <div class=\"result-text\">\n                <p class=\"name\">").concat(currDog[i].name, "</p>\n                <p class=\"description\">").concat(currDog[i].description, "</p>\n            </div>\n            <div class=\"btn-rate-result\">\n            <img src=\"images/heart.png\" id=\"favorite-btn-").concat(i, "\" class=\"result-icons\" alt=\"Favorite button\">\n            <img src=\"").concat(_dislikePng.dislikeBtnImage, "\" id=\"dislike-btn-").concat(i, "\" class=\"result-icons\" alt=\"Dislike button\">\n            </div>\n            </div>\n            ");
+            allDogs.push(templateCopy);
+        }
     }
     return allDogs;
 }
 function likeOrDislikeBtn(e) {
     var btn = e.target;
-    // Find what div this button is in so we can pull data from it to our favorites panel
+    // Handles the favorite button, which adds the selected pet to your favorites list
     if (btn.id.includes("favorite-btn")) {
         var parentResult = btn.closest("div.result");
         addToFavorites(parentResult);
     }
-    //if the id of the clicked element is "dislike-btn", do this
+    // Handles the dislike button, which removes the selected pet from both current & future search results
+    if (btn.id.includes("dislike-btn")) {
+        var parentResult1 = btn.closest("div.result");
+        // Get the string after 'id-' that is unique to each pet
+        var divIdText = String(parentResult1.id).split('id-');
+        var petId = divIdText[1];
+        resultsToFilterOut.push(petId);
+        parentResult1.remove();
+    }
     e.stopPropagation();
 }
 function addToFavorites(parentResult) {
@@ -754,8 +774,18 @@ function addToFavorites(parentResult) {
     ];
     _views.renderHtml(html, favoritesContainer, "beforeEnd");
 }
+function deleteFavorite(e) {
+    var btn = e.target;
+    // Find what div this button is in so we can pull its data to our favorites panel
+    if (btn.id.includes("delete-btn")) {
+        var parentResult = btn.closest("div.favorite");
+        // Delete item from favorites
+        parentResult.remove();
+    }
+    e.stopPropagation();
+}
 
-},{"@swc/helpers":"erO4s","regenerator-runtime":"12Ae8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU","./config":"h3Fhn","prelude-ls":"5pZFK","./views":"5FVmp"}],"erO4s":[function(require,module,exports) {
+},{"@swc/helpers":"erO4s","regenerator-runtime":"12Ae8","prelude-ls":"5pZFK","./config":"h3Fhn","./views":"5FVmp","../images/dislike.png":"1BF7l","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"erO4s":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "applyDecoratedDescriptor", ()=>_applyDecoratedDescriptorDefault.default
@@ -3001,20 +3031,8 @@ try {
     else Function("r", "regeneratorRuntime = r")(runtime);
 }
 
-},{}],"h3Fhn":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "KEY", function() {
-    return KEY;
-});
-parcelHelpers.export(exports, "SECRET", function() {
-    return SECRET;
-});
-var KEY = "VolA8e7Orq9dDfwn91VnKL1NApICUBTXYPoM5vZE0Ceeo52DID";
-var SECRET = 'Kf8eksZUhsTsMOoasD70ICQ2hETdAH970MBaBs17';
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"5pZFK":[function(require,module,exports) {
-// Generated by LiveScript 1.4.0
+},{}],"5pZFK":[function(require,module,exports) {
+// Generated by LiveScript 1.6.0
 var Func, List, Obj, Str, Num, id, isType, replicate, prelude, toString$ = {
 }.toString;
 Func = require('./Func.js');
@@ -3176,7 +3194,7 @@ prelude.even = Num.even;
 prelude.odd = Num.odd;
 prelude.gcd = Num.gcd;
 prelude.lcm = Num.lcm;
-prelude.VERSION = '1.1.2';
+prelude.VERSION = '1.2.1';
 module.exports = prelude;
 function curry$(f, bound) {
     var context, _curry = function(args) {
@@ -3190,8 +3208,8 @@ function curry$(f, bound) {
 }
 
 },{"./Func.js":"ec0MR","./List.js":"7z5TX","./Obj.js":"4CwUz","./Str.js":"8aoea","./Num.js":"k4xez"}],"ec0MR":[function(require,module,exports) {
-// Generated by LiveScript 1.4.0
-var apply, curry, flip, fix, over, memoize, slice$ = [].slice, toString$ = {
+// Generated by LiveScript 1.6.0
+var apply, curry, flip, fix, over, memoize, toString$ = {
 }.toString;
 apply = curry$(function(f, list) {
     return f.apply(null, list);
@@ -3221,8 +3239,10 @@ memoize = function memoize(f) {
     memo = {
     };
     return function() {
-        var args, key, arg;
-        args = slice$.call(arguments);
+        var args, res$, i$1, to$, key, arg;
+        res$ = [];
+        for(i$1 = 0, to$ = arguments.length; i$1 < to$; ++i$1)res$.push(arguments[i$1]);
+        args = res$;
         key = (function() {
             var i$, ref$, len$, results$ = [];
             for(i$ = 0, len$ = (ref$ = args).length; i$ < len$; ++i$){
@@ -3254,9 +3274,9 @@ function curry$(f, bound) {
 }
 
 },{}],"7z5TX":[function(require,module,exports) {
-// Generated by LiveScript 1.4.0
-var each, map, compact, filter, reject, partition, find, head, first, tail, last, initial, empty, reverse, unique, uniqueBy, fold, foldl, fold1, foldl1, foldr, foldr1, unfoldr, concat, concatMap, flatten, difference, intersection, union, countBy, groupBy, andList, orList, any, all, sort, sortWith, sortBy, sum, product, mean, average, maximum, minimum, maximumBy, minimumBy, scan, scanl, scan1, scanl1, scanr, scanr1, slice, take, drop, splitAt, takeWhile, dropWhile, span, breakList, zip, zipWith, zipAll, zipAllWith, at, elemIndex, elemIndices, findIndex, findIndices, toString$ = {
-}.toString, slice$ = [].slice;
+// Generated by LiveScript 1.6.0
+var each, map, compact, filter, reject, remove, partition, find, head, first, tail, last, initial, empty, reverse, unique, uniqueBy, fold, foldl, fold1, foldl1, foldr, foldr1, unfoldr, concat, concatMap, flatten, difference, intersection, union, countBy, groupBy, andList, orList, any, all, sort, sortWith, sortBy, sum, product, mean, average, maximum, minimum, maximumBy, minimumBy, scan, scanl, scan1, scanl1, scanr, scanr1, slice, take, drop, splitAt, takeWhile, dropWhile, span, breakList, zip, zipWith, zipAll, zipAllWith, at, elemIndex, elemIndices, findIndex, findIndices, toString$ = {
+}.toString;
 each = curry$(function(f, xs) {
     var i$, len$, x;
     for(i$ = 0, len$ = xs.length; i$ < len$; ++i$){
@@ -3296,6 +3316,13 @@ reject = curry$(function(f, xs) {
         if (!f(x)) results$.push(x);
     }
     return results$;
+});
+remove = curry$(function(el, xs) {
+    var i, x$;
+    i = elemIndex(el, xs);
+    x$ = xs.slice();
+    if (i != null) x$.splice(i, 1);
+    return x$;
 });
 partition = curry$(function(f, xs) {
     var passed, failed, i$, len$, x;
@@ -3417,8 +3444,10 @@ flatten = function(xs) {
     }());
 };
 difference = function difference(xs) {
-    var yss, results, i$, len$, x, j$, len1$, ys;
-    yss = slice$.call(arguments, 1);
+    var yss, res$, i$, to$, results, len$, x, j$, len1$, ys;
+    res$ = [];
+    for(i$ = 1, to$ = arguments.length; i$ < to$; ++i$)res$.push(arguments[i$]);
+    yss = res$;
     results = [];
     outer: for(i$ = 0, len$ = xs.length; i$ < len$; ++i$){
         x = xs[i$];
@@ -3431,8 +3460,10 @@ difference = function difference(xs) {
     return results;
 };
 intersection = function intersection(xs) {
-    var yss, results, i$, len$, x, j$, len1$, ys;
-    yss = slice$.call(arguments, 1);
+    var yss, res$, i$, to$, results, len$, x, j$, len1$, ys;
+    res$ = [];
+    for(i$ = 1, to$ = arguments.length; i$ < to$; ++i$)res$.push(arguments[i$]);
+    yss = res$;
     results = [];
     outer: for(i$ = 0, len$ = xs.length; i$ < len$; ++i$){
         x = xs[i$];
@@ -3445,8 +3476,10 @@ intersection = function intersection(xs) {
     return results;
 };
 union = function union() {
-    var xss, results, i$, len$, xs, j$, len1$, x;
-    xss = slice$.call(arguments);
+    var xss, res$, i$, to$, results, len$, xs, j$, len1$, x;
+    res$ = [];
+    for(i$ = 0, to$ = arguments.length; i$ < to$; ++i$)res$.push(arguments[i$]);
+    xss = res$;
     results = [];
     for(i$ = 0, len$ = xss.length; i$ < len$; ++i$){
         xs = xss[i$];
@@ -3692,8 +3725,10 @@ zipWith = curry$(function(f, xs, ys) {
     return result;
 });
 zipAll = function zipAll() {
-    var xss, minLength, i$, len$, xs, ref$, i, lresult$, j$, results$ = [];
-    xss = slice$.call(arguments);
+    var xss, res$, i$, to$, minLength, len$, xs, ref$, i, lresult$, j$, results$ = [];
+    res$ = [];
+    for(i$ = 0, to$ = arguments.length; i$ < to$; ++i$)res$.push(arguments[i$]);
+    xss = res$;
     minLength = undefined;
     for(i$ = 0, len$ = xss.length; i$ < len$; ++i$){
         xs = xss[i$];
@@ -3711,8 +3746,10 @@ zipAll = function zipAll() {
     return results$;
 };
 zipAllWith = function zipAllWith(f) {
-    var xss, minLength, i$1, len$1, xs, ref$1, i, results$1 = [];
-    xss = slice$.call(arguments, 1);
+    var xss, res$, i$1, to$, minLength, len$1, xs, ref$1, i, results$1 = [];
+    res$ = [];
+    for(i$1 = 1, to$ = arguments.length; i$1 < to$; ++i$1)res$.push(arguments[i$1]);
+    xss = res$;
     minLength = undefined;
     for(i$1 = 0, len$1 = xss.length; i$1 < len$1; ++i$1){
         xs = xss[i$1];
@@ -3776,6 +3813,7 @@ module.exports = {
     filter: filter,
     compact: compact,
     reject: reject,
+    remove: remove,
     partition: partition,
     find: find,
     head: head,
@@ -3870,7 +3908,7 @@ function not$(x) {
 }
 
 },{}],"4CwUz":[function(require,module,exports) {
-// Generated by LiveScript 1.4.0
+// Generated by LiveScript 1.6.0
 var values, keys, pairsToObj, objToPairs, listsToObj, objToLists, empty, each, map, compact, filter, reject, partition, find;
 values = function values(object) {
     var i$, x, results$ = [];
@@ -4028,7 +4066,7 @@ function curry$(f, bound) {
 }
 
 },{}],"8aoea":[function(require,module,exports) {
-// Generated by LiveScript 1.4.0
+// Generated by LiveScript 1.6.0
 var split, join, lines, unlines, words, unwords, chars, unchars, reverse, repeat, capitalize, camelize, dasherize;
 split = curry$(function(sep, str) {
     return str.split(sep);
@@ -4108,7 +4146,7 @@ function curry$(f, bound) {
 }
 
 },{}],"k4xez":[function(require,module,exports) {
-// Generated by LiveScript 1.4.0
+// Generated by LiveScript 1.6.0
 var max, min, negate, abs, signum, quot, rem, div, mod, recip, pi, tau, exp, sqrt, ln, pow, sin, tan, cos, asin, acos, atan, atan2, truncate, round, ceiling, floor, isItNaN, even, odd, gcd, lcm;
 max = curry$(function(x$, y$) {
     return x$ > y$ ? x$ : y$;
@@ -4232,7 +4270,19 @@ function curry$(f, bound) {
     return _curry();
 }
 
-},{}],"5FVmp":[function(require,module,exports) {
+},{}],"h3Fhn":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "KEY", function() {
+    return KEY;
+});
+parcelHelpers.export(exports, "SECRET", function() {
+    return SECRET;
+});
+var KEY = "VolA8e7Orq9dDfwn91VnKL1NApICUBTXYPoM5vZE0Ceeo52DID";
+var SECRET = 'Kf8eksZUhsTsMOoasD70ICQ2hETdAH970MBaBs17';
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"5FVmp":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "renderHtml", function() {
@@ -4261,6 +4311,44 @@ function toggleElement(el) {
     if (displayVal === "block" || displayVal === "inline") el.style.display = "none";
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}]},["3pKQK","WhRD4"], "WhRD4", "parcelRequire5a1e")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"1BF7l":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('RFSF5') + "dislike.c6ceb4e2.png" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"jkqJ4"}],"jkqJ4":[function(require,module,exports) {
+"use strict";
+var bundleURL = {
+};
+function getBundleURLCached(id) {
+    var value = bundleURL[id];
+    if (!value) {
+        value = getBundleURL();
+        bundleURL[id] = value;
+    }
+    return value;
+}
+function getBundleURL() {
+    try {
+        throw new Error();
+    } catch (err) {
+        var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
+        if (matches) // The first two stack frames will be this function and getBundleURLCached.
+        // Use the 3rd one, which will be a runtime in the original bundle.
+        return getBaseURL(matches[2]);
+    }
+    return '/';
+}
+function getBaseURL(url) {
+    return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
+} // TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
+function getOrigin(url) {
+    var matches = ('' + url).match(/(https?|file|ftp):\/\/[^/]+/);
+    if (!matches) throw new Error('Origin not found');
+    return matches[0];
+}
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+exports.getOrigin = getOrigin;
+
+},{}]},["d0Z72","WhRD4"], "WhRD4", "parcelRequire5a1e")
 
 //# sourceMappingURL=index.8b6dd95d.js.map

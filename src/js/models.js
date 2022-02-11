@@ -14,6 +14,7 @@ let whenTokenExpires = 0;
 let token = "";
 let jsonString = "";
 let searchResults;
+let resultsToFilterOut = [];
 
 const getToken = async function() {
     try {
@@ -33,7 +34,6 @@ const getToken = async function() {
 }
 
 function getFormData() {
-    console.log('getting data');
     let forms = document.forms;
      let formData = {
         gender: "",
@@ -43,15 +43,6 @@ function getFormData() {
     }; 
     const categories = ['age', 'gender', 'size', 'coat'];
     let formsArr = Array.from(forms);
-
-    /*
-    This paragraph of code comments describes how to check the user's choices if the forms are hard-coded in the HTML.
-    */
-   // Put the form names in an array
-   // Each el in the array is a form name. For each el, look that DOM element up using getElementById. 
-   // For that DOM element, get its children that have a type of 'input' and record in an array how many of those children there are.
-   // For each child, see if it's selected.
-   // Need to finish documenting this
 
     // Iterate through each form in the HTML
    formsArr.forEach((form) => {
@@ -119,19 +110,21 @@ function createHtmlforResults() {
     for (let i = 0; i < searchResults.animals.length; i++) {
         let currDog = searchResults.animals;
 
-        let templateCopy = `<div id="result-${i}" class="result">
-        <img src="${currDog[i].primary_photo_cropped.full}" class="result-img" alt="">
-        <div class="result-text">
-            <p class="name">${currDog[i].name}</p>
-            <p class="description">${currDog[i].description}</p>
-        </div>
-        <div class="btn-rate-result">
-        <img src="images/heart.png" id="favorite-btn-${i}" class="result-icons" alt="Favorite button">
-        <img src="images/dislike.png" id="dislike-btn-${i}" class="result-icons" alt="Dislike button">
-        </div>
-        </div>
-        `;
-        allDogs.push(templateCopy);
+        if (!resultsToFilterOut.includes(String(currDog[i].id))) {
+            let templateCopy = `<div id="result-${i}-id-${currDog[i].id}" class="result">
+            <img src="${currDog[i].primary_photo_cropped.full}" class="result-img" alt="">
+            <div class="result-text">
+                <p class="name">${currDog[i].name}</p>
+                <p class="description">${currDog[i].description}</p>
+            </div>
+            <div class="btn-rate-result">
+            <img src="images/heart.png" id="favorite-btn-${i}" class="result-icons" alt="Favorite button">
+            <img src="images/dislike.png" id="dislike-btn-${i}" class="result-icons" alt="Dislike button">
+            </div>
+            </div>
+            `;
+            allDogs.push(templateCopy);
+        }
     }
     return allDogs;
 }
@@ -139,11 +132,22 @@ function createHtmlforResults() {
 function likeOrDislikeBtn(e) {
     let btn = e.target;
 
-    // Find what div this button is in so we can pull data from it to our favorites panel
+    // Handles the favorite button, which adds the selected pet to your favorites list
     if (btn.id.includes("favorite-btn")) {
         let parentResult = btn.closest("div.result");
 
         addToFavorites(parentResult);
+    }
+
+    // Handles the dislike button, which removes the selected pet from both current & future search results
+    if (btn.id.includes("dislike-btn")) {
+        let parentResult = btn.closest("div.result");
+        // Get the string after 'id-' that is unique to each pet
+        let divIdText = String(parentResult.id).split('id-');
+        const petId = divIdText[1];
+
+        resultsToFilterOut.push(petId);
+        parentResult.remove();
     }
 
     e.stopPropagation();
@@ -170,7 +174,7 @@ function addToFavorites(parentResult) {
 function deleteFavorite(e) {
     let btn = e.target;
 
-    // Find what div this button is in so we can pull data from it to our favorites panel
+    // Find what div this button is in so we can pull its data to our favorites panel
     if (btn.id.includes("delete-btn")) {
         let parentResult = btn.closest("div.favorite");
 

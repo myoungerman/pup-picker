@@ -1,5 +1,19 @@
+body {
+    width: 1200px;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
 #btn-search {
+    margin-top: 30px;
     width: 100px;
+    background-color: #34b3ed;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
 }
 
 .btn-toggle {
@@ -7,10 +21,44 @@
     height: 45px;
 }
 
+.btn-rate-result {
+    position: absolute;
+    right: 0px;
+    width: 95px;
+    padding-top: 10px;
+}
+
+.delete-icon {
+    width: 100%;
+    max-width: 30px;
+    height: 30px;
+}
+
+.favorite {
+    display: flex;
+    flex-direction: row;
+    width: 305px;
+    height: 132px;
+    margin-bottom: 30px;
+}
+
 #favorites-container {
     display: flex;
     flex-direction: row;
-    
+    z-index: 2;
+    position: absolute;
+    right: 0px;
+    background-color: white;
+}
+
+.favorite-text {
+    padding-left: 10px;
+    font-size: 1.125rem;
+}
+
+.favorite-img {
+    max-width: 110px; 
+    width: 100%;
 }
 
 #favorites-list {
@@ -21,19 +69,56 @@
 #filter-container {
     display: flex;
     flex-direction: column;
+    width: 270px;
+    margin-right: 50px;
+    padding-left: 10px;
+}
+
+.filter-title {
+    font-size: 1.25rem;
+}
+
+h2 {
+    font-size: 1.5rem;
 }
 
 .img-logo {
     width: 75px;
 }
 
+label {
+    font-size: 1rem;
+    margin-right: 20px;
+    width: 70px;
+}
+
 main {
     display: flex;
     flex-direction: row;
+    position: relative;
+}
+
+.name {
+    width: 128px;
+}
+
+.img-logo {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.pet-description {
+    font-size: 1rem;
+    margin: 0px;
+}
+
+.pet-name {
+    font-size: 1.25rem;
+    font-weight: 600;
 }
 
 #site-masthead {
-    background-color: #2e2d74;
+    background-color: #34b3ed;
     color: #ffffff;
     display: flex;
     align-items: center;
@@ -44,24 +129,36 @@ main {
 .result {
     display: flex;
     flex-direction: row;
-    margin: 15px, 15px, 15px, 15px;
+    width: 680px;
+    height: 132px;
+    overflow: hidden;
+    position: relative;
+    border-color: lightgray;
+    border-style: solid;
+    border-width: 1px;
+    margin-bottom: 30px;
 }
 
 #results-container {
     display: flex;
     flex-direction: column;
+    width: 858px;
 }
 
 .result-icons {
     width: 30px;
+    margin-right: 10px;
 }
 
 .result-img {
-    width: 100px;
+    max-width: 100%;
+    padding: 10px 10px 10px 10px;
 }
 
 .result-text {
     display: flex;
     flex-direction: column;
+    width: 416px;
 }
+
 /*# sourceMappingURL=index.02bdb953.css.map */
