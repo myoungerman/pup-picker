@@ -1,6 +1,7 @@
 body {
     width: 1200px;
     font-family: 'Source Sans Pro', sans-serif;
+    padding-top: 80px;
 }
 
 #btn-search {
@@ -122,8 +123,11 @@ main {
     color: #ffffff;
     display: flex;
     align-items: center;
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
 }
 
 .result {

@@ -142,10 +142,10 @@
       this[globalName] = mainExports;
     }
   }
-})({"d0Z72":[function(require,module,exports) {
+})({"fAMxw":[function(require,module,exports) {
 "use strict";
 var HMR_HOST = null;
-var HMR_PORT = 1234;
+var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "916932b22e4085ab";
 module.bundle.HMR_BUNDLE_ID = "0a156ff98b6dd95d";
@@ -576,7 +576,6 @@ var _regeneratorRuntimeDefault = parcelHelpers.interopDefault(_regeneratorRuntim
 var _preludeLs = require("prelude-ls");
 var _config = require("./config");
 var _views = require("./views");
-var _dislikePng = require("../images/dislike.png");
 var whenTokenExpires = 0;
 var token = "";
 var jsonString = "";
@@ -739,7 +738,7 @@ function createHtmlforResults() {
     for(var i = 0; i < searchResults.animals.length; i++){
         var currDog = searchResults.animals;
         if (!resultsToFilterOut.includes(String(currDog[i].id))) {
-            var templateCopy = "<div id=\"result-".concat(i, "-id-").concat(currDog[i].id, "\" class=\"result\">\n            <img src=\"").concat(currDog[i].primary_photo_cropped.full, "\" class=\"result-img\" alt=\"\">\n            <div class=\"result-text\">\n                <p class=\"name\">").concat(currDog[i].name, "</p>\n                <p class=\"description\">").concat(currDog[i].description, "</p>\n            </div>\n            <div class=\"btn-rate-result\">\n            <img src=\"images/heart.png\" id=\"favorite-btn-").concat(i, "\" class=\"result-icons\" alt=\"Favorite button\">\n            <img src=\"").concat(_dislikePng.dislikeBtnImage, "\" id=\"dislike-btn-").concat(i, "\" class=\"result-icons\" alt=\"Dislike button\">\n            </div>\n            </div>\n            ");
+            var templateCopy = "<div id=\"result-".concat(i, "-id-").concat(currDog[i].id, "\" class=\"result\">\n            <img src=\"").concat(currDog[i].primary_photo_cropped.full, "\" class=\"result-img\" alt=\"\">\n            <div class=\"result-text\">\n                <p class=\"name\">").concat(currDog[i].name, "</p>\n                <p class=\"description\">").concat(currDog[i].description, "</p>\n            </div>\n            <div class=\"btn-rate-result\">\n            <img src=\"images/heart.png\" id=\"favorite-btn-").concat(i, "\" class=\"result-icons\" alt=\"Favorite button\">\n            <img src=\"images/dislike.png\" id=\"dislike-btn-").concat(i, "\" class=\"result-icons\" alt=\"Dislike button\">\n            </div>\n            </div>\n            ");
             allDogs.push(templateCopy);
         }
     }
@@ -785,7 +784,7 @@ function deleteFavorite(e) {
     e.stopPropagation();
 }
 
-},{"@swc/helpers":"erO4s","regenerator-runtime":"12Ae8","prelude-ls":"5pZFK","./config":"h3Fhn","./views":"5FVmp","../images/dislike.png":"1BF7l","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"erO4s":[function(require,module,exports) {
+},{"@swc/helpers":"erO4s","regenerator-runtime":"12Ae8","prelude-ls":"5pZFK","./config":"h3Fhn","./views":"5FVmp","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"erO4s":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "applyDecoratedDescriptor", ()=>_applyDecoratedDescriptorDefault.default
@@ -4311,44 +4310,6 @@ function toggleElement(el) {
     if (displayVal === "block" || displayVal === "inline") el.style.display = "none";
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"1BF7l":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('RFSF5') + "dislike.c6ceb4e2.png" + "?" + Date.now();
-
-},{"./helpers/bundle-url":"jkqJ4"}],"jkqJ4":[function(require,module,exports) {
-"use strict";
-var bundleURL = {
-};
-function getBundleURLCached(id) {
-    var value = bundleURL[id];
-    if (!value) {
-        value = getBundleURL();
-        bundleURL[id] = value;
-    }
-    return value;
-}
-function getBundleURL() {
-    try {
-        throw new Error();
-    } catch (err) {
-        var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
-        if (matches) // The first two stack frames will be this function and getBundleURLCached.
-        // Use the 3rd one, which will be a runtime in the original bundle.
-        return getBaseURL(matches[2]);
-    }
-    return '/';
-}
-function getBaseURL(url) {
-    return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
-} // TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
-function getOrigin(url) {
-    var matches = ('' + url).match(/(https?|file|ftp):\/\/[^/]+/);
-    if (!matches) throw new Error('Origin not found');
-    return matches[0];
-}
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-exports.getOrigin = getOrigin;
-
-},{}]},["d0Z72","WhRD4"], "WhRD4", "parcelRequire5a1e")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}]},["fAMxw","WhRD4"], "WhRD4", "parcelRequire5a1e")
 
 //# sourceMappingURL=index.8b6dd95d.js.map
