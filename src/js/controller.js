@@ -11,6 +11,7 @@ const searchBtn = document.getElementById('btn-search');
 const resultsContainer = document.getElementById('results-container');
 const toggleFavoritesBtn = document.getElementById('btn-toggle-favorites');
 const favoritesList = document.getElementById('favorites-list');
+const loadingIcon = document.getElementById('loading-icon');
 
 // Gets API token on startup
 init();
@@ -24,6 +25,7 @@ searchBtn.addEventListener('click', () => {
     hasTokenExpired();
     deleteChildren(resultsContainer);
     getFormData();
+    toggleElement(loadingIcon);
     searchForPets(renderHtml, resultsContainer);
 });
 

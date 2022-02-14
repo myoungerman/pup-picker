@@ -142,10 +142,10 @@
       this[globalName] = mainExports;
     }
   }
-})({"fAMxw":[function(require,module,exports) {
+})({"d0Z72":[function(require,module,exports) {
 "use strict";
 var HMR_HOST = null;
-var HMR_PORT = null;
+var HMR_PORT = 1234;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "916932b22e4085ab";
 module.bundle.HMR_BUNDLE_ID = "0a156ff98b6dd95d";
@@ -525,6 +525,7 @@ var searchBtn = document.getElementById('btn-search');
 var resultsContainer = document.getElementById('results-container');
 var toggleFavoritesBtn = document.getElementById('btn-toggle-favorites');
 var favoritesList = document.getElementById('favorites-list');
+var loadingIcon = document.getElementById('loading-icon');
 // Gets API token on startup
 init();
 function init() {
@@ -535,6 +536,7 @@ searchBtn.addEventListener('click', function() {
     _modelsJs.hasTokenExpired();
     _viewsJs.deleteChildren(resultsContainer);
     _modelsJs.getFormData();
+    _viewsJs.toggleElement(loadingIcon);
     _modelsJs.searchForPets(_viewsJs.renderHtml, resultsContainer);
 });
 // Handles the Like and Dislike button in each search result
@@ -682,7 +684,7 @@ function getFormData() {
 }
 var searchForPets = function(renderHtml, resultsContainer) {
     var _ref = _helpers.asyncToGenerator(_regeneratorRuntimeDefault.default.mark(function _callee(renderHtml, resultsContainer) {
-        var res, allDogs;
+        var res, allDogs, loadingIcon;
         return _regeneratorRuntimeDefault.default.wrap(function _callee$(_ctx) {
             while(1)switch(_ctx.prev = _ctx.next){
                 case 0:
@@ -703,21 +705,23 @@ var searchForPets = function(renderHtml, resultsContainer) {
                 case 6:
                     searchResults = _ctx.sent;
                     allDogs = createHtmlforResults();
+                    loadingIcon = document.getElementById('loading-icon');
+                    _views.toggleElement(loadingIcon);
                     renderHtml(allDogs, resultsContainer, "beforeEnd");
-                    _ctx.next = 14;
+                    _ctx.next = 16;
                     break;
-                case 11:
-                    _ctx.prev = 11;
+                case 13:
+                    _ctx.prev = 13;
                     _ctx.t0 = _ctx["catch"](0);
                     console.log(_ctx.t0);
-                case 14:
+                case 16:
                 case "end":
                     return _ctx.stop();
             }
         }, _callee, null, [
             [
                 0,
-                11
+                13
             ]
         ]);
     }));
@@ -738,7 +742,7 @@ function createHtmlforResults() {
     for(var i = 0; i < searchResults.animals.length; i++){
         var currDog = searchResults.animals;
         if (!resultsToFilterOut.includes(String(currDog[i].id))) {
-            var templateCopy = "<div id=\"result-".concat(i, "-id-").concat(currDog[i].id, "\" class=\"result\">\n            <img src=\"").concat(currDog[i].primary_photo_cropped.full, "\" class=\"result-img\" alt=\"\">\n            <div class=\"result-text\">\n                <p class=\"name\">").concat(currDog[i].name, "</p>\n                <p class=\"description\">").concat(currDog[i].description, "</p>\n            </div>\n            <div class=\"btn-rate-result\">\n            <img src=\"images/heart.png\" id=\"favorite-btn-").concat(i, "\" class=\"result-icons\" alt=\"Favorite button\">\n            <img src=\"images/dislike.png\" id=\"dislike-btn-").concat(i, "\" class=\"result-icons\" alt=\"Dislike button\">\n            </div>\n            </div>\n            ");
+            var templateCopy = "<div id=\"result-".concat(i, "-id-").concat(currDog[i].id, "\" class=\"result\">\n            <img src=\"").concat(currDog[i].primary_photo_cropped.full, "\" class=\"result-img\" alt=\"\">\n            <div class=\"result-text\">\n                <p class=\"pet-name\">").concat(currDog[i].name, "</p>\n                <p class=\"pet-description\">").concat(currDog[i].description, "</p>\n            </div>\n            <div class=\"btn-rate-result\">\n            <img src=\"/heart.2e4c1f30.png\" id=\"favorite-btn-").concat(i, "\" class=\"result-icons\" alt=\"Favorite button\">\n            <img src=\"/dislike.c6ceb4e2.png\" id=\"dislike-btn-").concat(i, "\" class=\"result-icons\" alt=\"Dislike button\">\n            </div>\n            </div>\n            ");
             allDogs.push(templateCopy);
         }
     }
@@ -767,9 +771,9 @@ function addToFavorites(parentResult) {
     get image and name of the element, then create the html to pass to renderHtml()
     */ var favoritesContainer = document.getElementById("favorites-list");
     var parentImg = parentResult.querySelector(".result-img").src;
-    var parentName = parentResult.querySelector(".name").textContent;
+    var parentName = parentResult.querySelector(".pet-name").textContent;
     var html = [
-        "<div id=\"favorite-".concat(i, "\" class=\"favorite\">\n   <img src=\"").concat(parentImg, "\" class=\"favorite-img\" alt=\"\">\n   <div class=\"favorite-text\">\n       <p class=\"name\">").concat(parentName, "</p>\n   </div>\n   <img src=\"images/close.png\" id=\"delete-btn-").concat(i, "\" class=\"delete-icon\" alt=\"Delete button\">\n   </div>")
+        "<div id=\"favorite-".concat(i, "\" class=\"favorite\">\n   <img src=\"").concat(parentImg, "\" class=\"favorite-img\" alt=\"\">\n   <div class=\"favorite-text\">\n       <p class=\"name\">").concat(parentName, "</p>\n   </div>\n   <img src=\"/close.ecc57116.png\" id=\"delete-btn-").concat(i, "\" class=\"delete-icon\" alt=\"Delete button\">\n   </div>")
     ];
     _views.renderHtml(html, favoritesContainer, "beforeEnd");
 }
@@ -784,7 +788,7 @@ function deleteFavorite(e) {
     e.stopPropagation();
 }
 
-},{"@swc/helpers":"erO4s","regenerator-runtime":"12Ae8","prelude-ls":"5pZFK","./config":"h3Fhn","./views":"5FVmp","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"erO4s":[function(require,module,exports) {
+},{"@swc/helpers":"erO4s","regenerator-runtime":"12Ae8","prelude-ls":"9hWwU","./config":"h3Fhn","./views":"5FVmp","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"erO4s":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "applyDecoratedDescriptor", ()=>_applyDecoratedDescriptorDefault.default
@@ -3030,8 +3034,8 @@ try {
     else Function("r", "regeneratorRuntime = r")(runtime);
 }
 
-},{}],"5pZFK":[function(require,module,exports) {
-// Generated by LiveScript 1.6.0
+},{}],"9hWwU":[function(require,module,exports) {
+// Generated by LiveScript 1.4.0
 var Func, List, Obj, Str, Num, id, isType, replicate, prelude, toString$ = {
 }.toString;
 Func = require('./Func.js');
@@ -3193,7 +3197,7 @@ prelude.even = Num.even;
 prelude.odd = Num.odd;
 prelude.gcd = Num.gcd;
 prelude.lcm = Num.lcm;
-prelude.VERSION = '1.2.1';
+prelude.VERSION = '1.1.2';
 module.exports = prelude;
 function curry$(f, bound) {
     var context, _curry = function(args) {
@@ -3206,9 +3210,9 @@ function curry$(f, bound) {
     return _curry();
 }
 
-},{"./Func.js":"ec0MR","./List.js":"7z5TX","./Obj.js":"4CwUz","./Str.js":"8aoea","./Num.js":"k4xez"}],"ec0MR":[function(require,module,exports) {
-// Generated by LiveScript 1.6.0
-var apply, curry, flip, fix, over, memoize, toString$ = {
+},{"./Func.js":"jJLq7","./List.js":"dQGuP","./Obj.js":"ehIRe","./Str.js":"ldosD","./Num.js":"ijXfs"}],"jJLq7":[function(require,module,exports) {
+// Generated by LiveScript 1.4.0
+var apply, curry, flip, fix, over, memoize, slice$ = [].slice, toString$ = {
 }.toString;
 apply = curry$(function(f, list) {
     return f.apply(null, list);
@@ -3238,10 +3242,8 @@ memoize = function memoize(f) {
     memo = {
     };
     return function() {
-        var args, res$, i$1, to$, key, arg;
-        res$ = [];
-        for(i$1 = 0, to$ = arguments.length; i$1 < to$; ++i$1)res$.push(arguments[i$1]);
-        args = res$;
+        var args, key, arg;
+        args = slice$.call(arguments);
         key = (function() {
             var i$, ref$, len$, results$ = [];
             for(i$ = 0, len$ = (ref$ = args).length; i$ < len$; ++i$){
@@ -3272,10 +3274,10 @@ function curry$(f, bound) {
     return _curry();
 }
 
-},{}],"7z5TX":[function(require,module,exports) {
-// Generated by LiveScript 1.6.0
-var each, map, compact, filter, reject, remove, partition, find, head, first, tail, last, initial, empty, reverse, unique, uniqueBy, fold, foldl, fold1, foldl1, foldr, foldr1, unfoldr, concat, concatMap, flatten, difference, intersection, union, countBy, groupBy, andList, orList, any, all, sort, sortWith, sortBy, sum, product, mean, average, maximum, minimum, maximumBy, minimumBy, scan, scanl, scan1, scanl1, scanr, scanr1, slice, take, drop, splitAt, takeWhile, dropWhile, span, breakList, zip, zipWith, zipAll, zipAllWith, at, elemIndex, elemIndices, findIndex, findIndices, toString$ = {
-}.toString;
+},{}],"dQGuP":[function(require,module,exports) {
+// Generated by LiveScript 1.4.0
+var each, map, compact, filter, reject, partition, find, head, first, tail, last, initial, empty, reverse, unique, uniqueBy, fold, foldl, fold1, foldl1, foldr, foldr1, unfoldr, concat, concatMap, flatten, difference, intersection, union, countBy, groupBy, andList, orList, any, all, sort, sortWith, sortBy, sum, product, mean, average, maximum, minimum, maximumBy, minimumBy, scan, scanl, scan1, scanl1, scanr, scanr1, slice, take, drop, splitAt, takeWhile, dropWhile, span, breakList, zip, zipWith, zipAll, zipAllWith, at, elemIndex, elemIndices, findIndex, findIndices, toString$ = {
+}.toString, slice$ = [].slice;
 each = curry$(function(f, xs) {
     var i$, len$, x;
     for(i$ = 0, len$ = xs.length; i$ < len$; ++i$){
@@ -3315,13 +3317,6 @@ reject = curry$(function(f, xs) {
         if (!f(x)) results$.push(x);
     }
     return results$;
-});
-remove = curry$(function(el, xs) {
-    var i, x$;
-    i = elemIndex(el, xs);
-    x$ = xs.slice();
-    if (i != null) x$.splice(i, 1);
-    return x$;
 });
 partition = curry$(function(f, xs) {
     var passed, failed, i$, len$, x;
@@ -3443,10 +3438,8 @@ flatten = function(xs) {
     }());
 };
 difference = function difference(xs) {
-    var yss, res$, i$, to$, results, len$, x, j$, len1$, ys;
-    res$ = [];
-    for(i$ = 1, to$ = arguments.length; i$ < to$; ++i$)res$.push(arguments[i$]);
-    yss = res$;
+    var yss, results, i$, len$, x, j$, len1$, ys;
+    yss = slice$.call(arguments, 1);
     results = [];
     outer: for(i$ = 0, len$ = xs.length; i$ < len$; ++i$){
         x = xs[i$];
@@ -3459,10 +3452,8 @@ difference = function difference(xs) {
     return results;
 };
 intersection = function intersection(xs) {
-    var yss, res$, i$, to$, results, len$, x, j$, len1$, ys;
-    res$ = [];
-    for(i$ = 1, to$ = arguments.length; i$ < to$; ++i$)res$.push(arguments[i$]);
-    yss = res$;
+    var yss, results, i$, len$, x, j$, len1$, ys;
+    yss = slice$.call(arguments, 1);
     results = [];
     outer: for(i$ = 0, len$ = xs.length; i$ < len$; ++i$){
         x = xs[i$];
@@ -3475,10 +3466,8 @@ intersection = function intersection(xs) {
     return results;
 };
 union = function union() {
-    var xss, res$, i$, to$, results, len$, xs, j$, len1$, x;
-    res$ = [];
-    for(i$ = 0, to$ = arguments.length; i$ < to$; ++i$)res$.push(arguments[i$]);
-    xss = res$;
+    var xss, results, i$, len$, xs, j$, len1$, x;
+    xss = slice$.call(arguments);
     results = [];
     for(i$ = 0, len$ = xss.length; i$ < len$; ++i$){
         xs = xss[i$];
@@ -3724,10 +3713,8 @@ zipWith = curry$(function(f, xs, ys) {
     return result;
 });
 zipAll = function zipAll() {
-    var xss, res$, i$, to$, minLength, len$, xs, ref$, i, lresult$, j$, results$ = [];
-    res$ = [];
-    for(i$ = 0, to$ = arguments.length; i$ < to$; ++i$)res$.push(arguments[i$]);
-    xss = res$;
+    var xss, minLength, i$, len$, xs, ref$, i, lresult$, j$, results$ = [];
+    xss = slice$.call(arguments);
     minLength = undefined;
     for(i$ = 0, len$ = xss.length; i$ < len$; ++i$){
         xs = xss[i$];
@@ -3745,10 +3732,8 @@ zipAll = function zipAll() {
     return results$;
 };
 zipAllWith = function zipAllWith(f) {
-    var xss, res$, i$1, to$, minLength, len$1, xs, ref$1, i, results$1 = [];
-    res$ = [];
-    for(i$1 = 1, to$ = arguments.length; i$1 < to$; ++i$1)res$.push(arguments[i$1]);
-    xss = res$;
+    var xss, minLength, i$1, len$1, xs, ref$1, i, results$1 = [];
+    xss = slice$.call(arguments, 1);
     minLength = undefined;
     for(i$1 = 0, len$1 = xss.length; i$1 < len$1; ++i$1){
         xs = xss[i$1];
@@ -3812,7 +3797,6 @@ module.exports = {
     filter: filter,
     compact: compact,
     reject: reject,
-    remove: remove,
     partition: partition,
     find: find,
     head: head,
@@ -3906,8 +3890,8 @@ function not$(x) {
     return !x;
 }
 
-},{}],"4CwUz":[function(require,module,exports) {
-// Generated by LiveScript 1.6.0
+},{}],"ehIRe":[function(require,module,exports) {
+// Generated by LiveScript 1.4.0
 var values, keys, pairsToObj, objToPairs, listsToObj, objToLists, empty, each, map, compact, filter, reject, partition, find;
 values = function values(object) {
     var i$, x, results$ = [];
@@ -4064,8 +4048,8 @@ function curry$(f, bound) {
     return _curry();
 }
 
-},{}],"8aoea":[function(require,module,exports) {
-// Generated by LiveScript 1.6.0
+},{}],"ldosD":[function(require,module,exports) {
+// Generated by LiveScript 1.4.0
 var split, join, lines, unlines, words, unwords, chars, unchars, reverse, repeat, capitalize, camelize, dasherize;
 split = curry$(function(sep, str) {
     return str.split(sep);
@@ -4144,8 +4128,8 @@ function curry$(f, bound) {
     return _curry();
 }
 
-},{}],"k4xez":[function(require,module,exports) {
-// Generated by LiveScript 1.6.0
+},{}],"ijXfs":[function(require,module,exports) {
+// Generated by LiveScript 1.4.0
 var max, min, negate, abs, signum, quot, rem, div, mod, recip, pi, tau, exp, sqrt, ln, pow, sin, tan, cos, asin, acos, atan, atan2, truncate, round, ceiling, floor, isItNaN, even, odd, gcd, lcm;
 max = curry$(function(x$, y$) {
     return x$ > y$ ? x$ : y$;
@@ -4278,7 +4262,7 @@ parcelHelpers.export(exports, "KEY", function() {
 parcelHelpers.export(exports, "SECRET", function() {
     return SECRET;
 });
-var KEY = "VolA8e7Orq9dDfwn91VnKL1NApICUBTXYPoM5vZE0Ceeo52DID";
+var KEY = 'VolA8e7Orq9dDfwn91VnKL1NApICUBTXYPoM5vZE0Ceeo52DID';
 var SECRET = 'Kf8eksZUhsTsMOoasD70ICQ2hETdAH970MBaBs17';
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"5FVmp":[function(require,module,exports) {
@@ -4310,6 +4294,6 @@ function toggleElement(el) {
     if (displayVal === "block" || displayVal === "inline") el.style.display = "none";
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}]},["fAMxw","WhRD4"], "WhRD4", "parcelRequire5a1e")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}]},["d0Z72","WhRD4"], "WhRD4", "parcelRequire5a1e")
 
 //# sourceMappingURL=index.8b6dd95d.js.map

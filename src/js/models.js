@@ -1,6 +1,6 @@
 import { all } from "prelude-ls";
 import { KEY, SECRET } from "./config";
-import { renderHtml } from "./views";
+import { renderHtml, toggleElement } from "./views";
 
 export { getToken };
 export { getFormData };
@@ -87,8 +87,11 @@ const searchForPets = async function (renderHtml, resultsContainer) {
         });
         searchResults = await res.json();
         let allDogs = createHtmlforResults();
+        /* hide spinner */
+        let loadingIcon = document.getElementById('loading-icon');
+        toggleElement(loadingIcon);
         renderHtml(allDogs, resultsContainer, "beforeEnd");
-        // add event listeners for buttons
+
     } catch (err) {
         console.log(err);
     }
@@ -114,12 +117,12 @@ function createHtmlforResults() {
             let templateCopy = `<div id="result-${i}-id-${currDog[i].id}" class="result">
             <img src="${currDog[i].primary_photo_cropped.full}" class="result-img" alt="">
             <div class="result-text">
-                <p class="name">${currDog[i].name}</p>
-                <p class="description">${currDog[i].description}</p>
+                <p class="pet-name">${currDog[i].name}</p>
+                <p class="pet-description">${currDog[i].description}</p>
             </div>
             <div class="btn-rate-result">
-            <img src="images/heart.png" id="favorite-btn-${i}" class="result-icons" alt="Favorite button">
-            <img src="images/dislike.png" id="dislike-btn-${i}" class="result-icons" alt="Dislike button">
+            <img src="/heart.2e4c1f30.png" id="favorite-btn-${i}" class="result-icons" alt="Favorite button">
+            <img src="/dislike.c6ceb4e2.png" id="dislike-btn-${i}" class="result-icons" alt="Dislike button">
             </div>
             </div>
             `;
@@ -159,13 +162,13 @@ function addToFavorites(parentResult) {
     */
    let favoritesContainer = document.getElementById("favorites-list");
    let parentImg = parentResult.querySelector(".result-img").src;
-   let parentName = parentResult.querySelector(".name").textContent;
+   let parentName = parentResult.querySelector(".pet-name").textContent;
    let html = [`<div id="favorite-${i}" class="favorite">
    <img src="${parentImg}" class="favorite-img" alt="">
    <div class="favorite-text">
        <p class="name">${parentName}</p>
    </div>
-   <img src="images/close.png" id="delete-btn-${i}" class="delete-icon" alt="Delete button">
+   <img src="/close.ecc57116.png" id="delete-btn-${i}" class="delete-icon" alt="Delete button">
    </div>`];
 
    renderHtml(html, favoritesContainer, "beforeEnd");

@@ -79,7 +79,7 @@ body {
     font-size: 1.25rem;
 }
 
-h2 {
+.section-header {
     font-size: 1.5rem;
 }
 
@@ -91,6 +91,14 @@ label {
     font-size: 1rem;
     margin-right: 20px;
     width: 70px;
+}
+
+#loading-icon {
+    width: 128px;
+    height: auto;
+    margin-left: 50%;
+    margin-top: 25%;
+    display: none;
 }
 
 main {
